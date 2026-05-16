@@ -3,166 +3,623 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的追剧清单</title>
+    <title>Cinephile.Z | 我的私藏剧单与观影手账</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        :root {
-            --bg-color: #f7f9fa;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --text-secondary: #666666;
-            --primary-color: #8e44ad;
-        }
-
         body {
-            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #08090c;
+            color: #f3f4f6;
+            overflow-x: hidden;
         }
-
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            width: 100%;
-            text-align: center;
-            padding: 40px 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        /* 自定义霓虹发光与毛玻璃特效 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
+        .glow-purple {
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
         }
-
-        header p {
-            margin: 10px 0 0 0;
-            opacity: 0.8;
+        .glow-red {
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.15);
         }
-
-        .container {
-            max-width: 1200px;
-            width: 90%;
-            margin: 40px auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+        .glow-blue {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
         }
-
-        .drama-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
+        /* 隐藏滚动条但保留功能 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-
-        .drama-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-
-        .drama-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            background-color: #e0e0e0;
+        /* 自定义全局精致滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-
-        .drama-info {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
+        ::-webkit-scrollbar-track {
+            background: #08090c;
         }
-
-        .drama-title {
-            margin: 0 0 10px 0;
-            font-size: 1.5rem;
-            color: var(--text-color);
-            border-left: 4px solid var(--primary-color);
-            padding-left: 10px;
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
         }
-
-        .drama-meta {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
-
-        .drama-meta span {
-            margin-right: 15px;
-            background: #f0f2f5;
-            padding: 3px 8px;
-            border-radius: 4px;
-        }
-
-        .drama-description {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text-secondary);
-            margin: 0;
-            text-align: justify;
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 20px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.4);
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col antialiased">
 
-    <header>
-        <h1>🎬 我的私藏剧单</h1>
-        <p>记录我看过的那些精彩剧集，点滴感动都在这里。</p>
-    </header>
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[150px] pointer-events-none"></div>
 
-    <div class="container">
+    <nav class="sticky top-0 z-40 w-full glass-card border-b border-white/5 px-6 py-4 flex items-center justify-between backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="bg-gradient-to-r from-purple-600 to-red-500 w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold tracking-wider text-xl shadow-lg shadow-purple-500/20">🍿</div>
+            <span class="text-xl font-bold bg-gradient-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent tracking-tight">Cinephile<span class="text-purple-500">.Z</span></span>
+        </div>
         
-        <div class="drama-card">
-            <img class="drama-image" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500" alt="琉璃">
-            <div class="drama-info">
-                <h2 class="drama-title">琉璃</h2>
-                <div class="drama-meta">
-                    <span>仙侠</span>
-                    <span>虐恋情深</span>
-                    <span>十生十世</span>
-                </div>
-                <p class="drama-description">
-                    由成毅、袁冰妍主演的古装仙侠剧。讲述了天生“六识”残缺的少女褚璇玑和离泽宫弟子禹司凤在面临爱情与前世阴谋的双重压力下，携手面对百般磨难，缔造了一段极具色彩的仙侠传奇的故事。司凤的“吐血”和深情绝对是仙侠剧里的天花板之一。
-                </p>
+        <div class="flex items-center gap-6">
+            <button onclick="toggleAdminModal()" class="cursor-pointer bg-white/5 hover:bg-white/10 text-xs px-4 py-2 rounded-full border border-white/10 transition flex items-center gap-2">
+                <i class="fa-solid fa-plus text-purple-400"></i> 添加新看剧
+            </button>
+            <div class="flex items-center gap-3 border-l border-white/10 pl-6">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Avatar" class="w-8 h-8 rounded-full border border-purple-500 object-cover">
+                <span class="text-sm font-medium text-neutral-300 hidden md:inline">言溪_</span>
             </div>
         </div>
+    </nav>
 
-        <div class="drama-card">
-            <img class="drama-image" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=500" alt="沉香如屑">
-            <div class="drama-info">
-                <h2 class="drama-title">沉香如屑</h2>
-                <div class="drama-meta">
-                    <span>仙侠</span>
-                    <span>双向奔赴</span>
-                    <span>荡气回肠</span>
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 md:px-8 py-8 space-y-12">
+
+        <section class="relative rounded-3xl overflow-hidden h-[480px] bg-cover bg-center flex items-end group shadow-2xl transition duration-500" id="hero-banner" style="background-image: linear-gradient(to top, rgba(8,9,12,1) 0%, rgba(8,9,12,0.4) 50%, rgba(0,0,0,0) 100%), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200');">
+            <div class="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-transparent pointer-events-none"></div>
+            <div class="p-8 md:p-12 space-y-4 max-w-2xl relative z-10">
+                <div class="flex items-center gap-3">
+                    <span class="bg-purple-500/20 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full border border-purple-500/30 backdrop-blur-md">✨ 本月强推 ✨</span>
+                    <span class="text-neutral-400 text-sm"><i class="fa-solid fa-star text-amber-400 mr-1"></i> 9.8 / 10</span>
                 </div>
-                <p class="drama-description">
-                    由成毅、杨紫主演的古装仙侠剧，改编自苏寞的同名小说。讲述了菡萏仙子颜淡与六界帝君应渊海市蜃楼般的爱情纠葛。两人历经误会与磨难，在解开以往的误会后，最终收获爱情并共同守护苍生。无论是夜忘川的白发，还是凡间捉妖的趣事，都让人印象深刻。
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-md" id="hero-title">琉璃 (Love and Redemption)</h1>
+                <p class="text-neutral-300 text-sm md:text-base leading-relaxed line-clamp-3" id="hero-synopsis">
+                    天生“六识”残缺的少女褚璇玑和离泽宫弟子禹司凤，在面临爱情与前世阴谋的双重压力下，携手面对百般磨难，缔造了一段荡气回肠的仙侠传奇。司凤十生十世的隐忍付出与深情堪称仙侠白月光。
                 </p>
+                <div class="pt-2 flex flex-wrap gap-3">
+                    <button onclick="scrollToDrama('drama-1')" class="cursor-pointer bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium px-6 py-3 rounded-xl transition flex items-center gap-2 text-sm shadow-lg shadow-purple-600/30">
+                        <i class="fa-solid fa-book-open"></i> 查看我的长评
+                    </button>
+                    <button onclick="switchHeroFeatured()" class="cursor-pointer bg-white/10 hover:bg-white/20 text-white font-medium px-4 py-3 rounded-xl transition text-sm backdrop-blur-md border border-white/10">
+                        <i class="fa-solid fa-shuffle"></i> 换一首推剧
+                    </button>
+                </div>
             </div>
-        </div>
+            <div class="absolute top-6 right-6 glass-card px-4 py-2 rounded-full text-xs font-medium text-emerald-400 border border-emerald-500/30 shadow-lg flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 状态: N刷完结
+            </div>
+        </section>
 
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass-card rounded-2xl p-6 flex flex-col justify-between glow-purple relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-purple-600/10 rounded-full blur-3xl"></div>
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Avatar" class="w-14 h-14 rounded-2xl object-cover border-2 border-purple-500/50 p-0.5">
+                    <div>
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">言溪的观剧日常 <span class="text-xs font-normal text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded-md bg-purple-500/5">Gen Z 追剧星人</span></h3>
+                        <p class="text-neutral-400 text-xs mt-0.5">“在别人的故事里，流自己的眼泪。成毅资深剧迷，唯爱仙侠与深情虐恋。”</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="bg-white/5 rounded-xl p-3 border border-white/5">
+                        <p class="text-xs text-neutral-400 uppercase tracking-wider">总收录剧集</p>
+                        <p class="text-2xl font-extrabold text-purple-400 mt-1" id="stat-total">0</p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-3 border border-white/5">
+                        <p class="text-xs text-neutral-400 uppercase tracking-wider">坠爱题材</p>
+                        <p class="text-base font-bold text-red-400 mt-2 truncate" id="stat-genre">古装仙侠</p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-3 border border-white/5">
+                        <p class="text-xs text-neutral-400 uppercase tracking-wider">平均打分</p>
+                        <p class="text-2xl font-extrabold text-blue-400 mt-1" id="stat-rating">0.0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-6 border-l-4 border-amber-500 flex flex-col justify-between relative overflow-hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-md border border-amber-500/20 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Currently Watching
+                    </span>
+                    <span class="text-neutral-500 text-xs">实时同步</span>
+                </div>
+                <div class="flex gap-4">
+                    <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=300" alt="沉香如屑" class="w-16 h-22 rounded-xl object-cover shadow-md flex-shrink-0">
+                    <div class="space-y-1">
+                        <h4 class="text-base font-bold text-white line-clamp-1">沉香如屑 · 沉香重华</h4>
+                        <p class="text-xs text-neutral-400"><i class="fa-solid fa-folder-open mr-1"></i> C-Drama / 仙侠</p>
+                        <div class="w-full bg-white/10 h-1.5 rounded-full mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full w-4/5"></div>
+                        </div>
+                        <p class="text-[10px] text-neutral-500 text-right mt-1">进度：第 38 集 / 共 59 集</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-2xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-lg sticky top-22 z-30 backdrop-blur-lg">
+            <div class="relative w-full md:w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 text-sm"></i>
+                <input type="text" id="search-input" oninput="filterDramas()" placeholder="输入剧名、演员、影评关键词..." class="w-full bg-white/5 border border-white/10 rounded-xl pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition placeholder-neutral-500">
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-start md:justify-end overflow-x-auto no-scrollbar">
+                <button onclick="setCategoryFilter('All')" class="category-btn cursor-pointer bg-purple-600 text-white text-xs font-medium px-4 py-2.5 rounded-xl transition whitespace-nowrap" data-cat="All">全部剧目</button>
+                <button onclick="setCategoryFilter('C-Drama')" class="category-btn cursor-pointer bg-white/5 hover:bg-white/10 text-neutral-300 text-xs font-medium px-4 py-2.5 rounded-xl transition whitespace-nowrap" data-cat="C-Drama">华语剧</button>
+                <button onclick="setCategoryFilter('K-Drama')" class="category-btn cursor-pointer bg-white/5 hover:bg-white/10 text-neutral-300 text-xs font-medium px-4 py-2.5 rounded-xl transition whitespace-nowrap" data-cat="K-Drama">韩剧</button>
+                <button onclick="setCategoryFilter('Western/English')" class="category-btn cursor-pointer bg-white/5 hover:bg-white/10 text-neutral-300 text-xs font-medium px-4 py-2.5 rounded-xl transition whitespace-nowrap" data-cat="Western/English">欧美剧</button>
+                <button onclick="setCategoryFilter('Movies')" class="category-btn cursor-pointer bg-white/5 hover:bg-white/10 text-neutral-300 text-xs font-medium px-4 py-2.5 rounded-xl transition whitespace-nowrap" data-cat="Movies">电影</button>
+                
+                <select id="status-select" onchange="filterDramas()" class="bg-white/5 border border-white/10 text-neutral-300 text-xs font-medium px-3 py-2.5 rounded-xl focus:outline-none focus:border-purple-500 transition cursor-pointer">
+                    <option value="All" class="bg-[#12131a]">所有观看状态</option>
+                    <option value="Completed" class="bg-[#12131a]">🎉 已完结</option>
+                    <option value="Watching" class="bg-[#12131a]">🍿 正在追</option>
+                    <option value="Planning" class="bg-[#12131a]">⏳ 想看</option>
+                    <option value="Dropped" class="bg-[#12131a]">❌ 弃剧</option>
+                </select>
+            </div>
+        </section>
+
+        <section>
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold tracking-tight flex items-center gap-2">
+                    <span class="w-3 h-6 bg-gradient-to-b from-purple-600 to-red-500 rounded-full inline-block"></span>
+                    独家手账库 (<span id="filtered-count">0</span>)
+                </h2>
+                <span class="text-neutral-500 text-xs">Hover 卡片查看高能影评</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="drama-grid">
+                </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-8 relative overflow-hidden text-center glow-red border border-red-500/10">
+            <div class="absolute top-4 left-6 text-7xl text-white/5 font-serif select-none">“</div>
+            <div class="max-w-2xl mx-auto space-y-4 relative z-10">
+                <h3 class="text-xs uppercase tracking-widest text-red-400 font-bold">高能共情时刻 · Emotional Quote</h3>
+                <p class="text-lg md:text-xl font-medium text-neutral-200 leading-relaxed italic" id="quote-text">
+                    “我满眼都是他，可他为了天下苍生，唯独负了我。但若重来一次，他依然会救苍生，而我依然会爱他。”
+                </p>
+                <div class="text-sm text-neutral-400 font-semibold" id="quote-source">—— 《沉香如屑》· 颜淡</div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="detail-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="glass-card max-w-3xl w-full max-h-[90vh] rounded-2xl overflow-y-auto overflow-x-hidden p-6 md:p-8 space-y-6 relative border border-white/10 shadow-2xl scale-95 transition-transform duration-300" id="detail-modal-body">
+            </div>
     </div>
 
-    <footer>
-        <p>© 2026 我的追剧清单 | 用心记录每一部好剧</p>
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="glass-card max-w-lg w-full rounded-2xl p-6 space-y-4 border border-purple-500/20 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <h3 class="text-lg font-bold text-white"><i class="fa-solid fa-square-plus text-purple-400 mr-2"></i>录入新看过的剧集</h3>
+                <button onclick="toggleAdminModal()" class="text-neutral-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="drama-form" onsubmit="handleFormSubmit(event)" class="space-y-4 text-sm text-neutral-200">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-neutral-400 mb-1">剧集名称 *</label>
+                        <input type="text" name="title" required class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-neutral-400 mb-1">上映年份</label>
+                        <input type="number" name="year" placeholder="2026" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-neutral-400 mb-1">分类板块</label>
+                        <select name="category" class="w-full bg-[#12131a] border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-purple-500">
+                            <option value="C-Drama">华语剧 (C-Drama)</option>
+                            <option value="K-Drama">韩剧 (K-Drama)</option>
+                            <option value="Western/English">欧美剧 (Western)</option>
+                            <option value="Movies">电影 (Movies)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-neutral-400 mb-1">追剧状态</label>
+                        <select name="status" class="w-full bg-[#12131a] border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-purple-500">
+                            <option value="Completed">已完结</option>
+                            <option value="Watching">追剧中</option>
+                            <option value="Planning">想看</option>
+                            <option value="Dropped">已弃剧</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-neutral-400 mb-1">个人评分 (1-10分)</label>
+                        <input type="number" step="0.1" max="10" min="0" name="rating" placeholder="9.5" required class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-neutral-400 mb-1">封面URL (可空)</label>
+                        <input type="text" name="poster" placeholder="https://..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-neutral-400 mb-1">标签特征 (逗号隔开)</label>
+                    <input type="text" name="genres" placeholder="仙侠, 虐恋, 搞钱, 大女主" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-neutral-400 mb-1">剧情简介</label>
+                    <textarea name="synopsis" rows="2" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-purple-500"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs text-neutral-400 mb-1">一句话高能私藏剧评</label>
+                    <textarea name="review" rows="2" placeholder="写下深深震撼到你的槽点或痛点..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-purple-500"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 py-2.5 rounded-xl font-bold text-white shadow-lg shadow-purple-500/20 hover:opacity-90 transition cursor-pointer">打包封存、存入系统</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="w-full text-center py-8 text-neutral-600 border-t border-white/5 text-xs mt-12 space-y-2">
+        <p>© 2026 Cinephile.Z — 献给浩瀚荧幕中曾照亮过我的无数场梦境</p>
+        <div class="flex justify-center gap-4 text-sm text-neutral-500">
+            <a href="#" class="hover:text-purple-400"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="hover:text-purple-400"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="hover:text-purple-400"><i class="fa-solid fa-heart"></i></a>
+        </div>
     </footer>
 
+    <script>
+        // 1. 初始化预填基础剧集数据
+        const defaultDramas = [
+            {
+                id: "drama-1",
+                title: "琉璃",
+                year: "2020",
+                category: "C-Drama",
+                genres: ["仙侠", "虐恋情深", "大女主"],
+                rating: 9.6,
+                status: "Completed",
+                poster: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500",
+                synopsis: "由成毅、袁冰妍主演。讲述了天生“六识”残缺的少女褚璇玑和离泽宫弟子禹司凤在面临爱情与前世阴谋的双重压力下，携手面对百般磨难，缔造了一段极具色彩的仙侠传奇的故事。",
+                review: "禹司凤吐最极限的血，撑起仙侠纯爱最顶级的深情！十生十世的救赎设定百看不厌，名场面层出不穷，打戏特效至今仍是天花板水准。",
+                quote: "“褚璇玑，你是个没有心的人。” —— 司凤的隐忍，是把碎骨血吞进腹中的温柔。"
+            },
+            {
+                id: "drama-2",
+                title: "沉香如屑 · 沉香重华",
+                year: "2022",
+                category: "C-Drama",
+                genres: ["仙侠", "天下苍生", "成毅"],
+                rating: 9.3,
+                status: "Watching",
+                poster: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=500",
+                synopsis: "由成毅、杨紫主演。讲述了菡萏仙子颜淡与六界帝君应渊海市蜃楼般的爱情纠葛。两人历经误会与磨难，在解开以往的误会后，最终收获爱情并共同守护苍生。",
+                review: "夜忘川的八百年徘徊、地止的白发疯批应渊、凡间的捉妖唐周，成毅把一个神仙的多面人格演活了！虐心的地方哭湿枕头，格局很大。",
+                quote: "“我满眼都是他，可他为了天下苍生，唯独负了我。”"
+            },
+            {
+                id: "drama-3",
+                title: "怪奇物语 第四季 (Stranger Things 4)",
+                year: "2022",
+                category: "Western/English",
+                genres: ["科幻", "惊悚", "复古", "GenZ"],
+                rating: 9.5,
+                status: "Completed",
+                poster: "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=500",
+                synopsis: "霍金斯小镇再起波澜，面对前所未有的恐怖反派大魔王 Vecna，四分五裂的主角团开始携手解开尘封多年的超能力实验室谜团。",
+                review: "Max听着《Running Up That Hill》逃离钟声诅咒那段直接封神！配乐、剪辑、剧本张力绝对是美剧第一梯队，热血而震撼。",
+                quote: "“Keep running, Max!” 音乐响起的瞬间，我的灵魂都跟着颤栗了。"
+            }
+        ];
+
+        // 状态库
+        let dramas = JSON.parse(localStorage.getItem('my_drama_journal')) || defaultDramas;
+        let currentCategory = 'All';
+        
+        // 状态映射表
+        const statusMap = {
+            'Completed': { text: '已完结', color: 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' },
+            'Watching': { text: '追剧中', color: 'text-amber-400 border-amber-500/20 bg-amber-500/5' },
+            'Planning': { text: '想看', color: 'text-blue-400 border-blue-500/20 bg-blue-500/5' },
+            'Dropped': { text: '已弃剧', color: 'text-rose-400 border-rose-500/20 bg-rose-500/5' }
+        };
+
+        // 页面首次渲染加载
+        window.onload = function() {
+            renderDashboardStats();
+            filterDramas();
+            setupQuotesAnimation();
+        };
+
+        // 2. 动态计算顶部仪表盘数据看板
+        function renderDashboardStats() {
+            document.getElementById('stat-total').innerText = dramas.length;
+            
+            // 算平均分
+            if(dramas.length > 0) {
+                let totalScore = dramas.reduce((acc, curr) => acc + parseFloat(curr.rating || 0), 0);
+                document.getElementById('stat-rating').innerText = (totalScore / dramas.length).toFixed(1);
+            } else {
+                document.getElementById('stat-rating').innerText = "0.0";
+            }
+
+            // 计算出现频率最高的题材/标签
+            let genreCounts = {};
+            dramas.forEach(d => {
+                if(Array.isArray(d.genres)){
+                    d.genres.forEach(g => genreCounts[g] = (genreCounts[g] || 0) + 1);
+                }
+            });
+            let topGenre = Object.keys(genreCounts).reduce((a, b) => genreCounts[a] > genreCounts[b] ? a : b, "暂无数据");
+            document.getElementById('stat-genre').innerText = topGenre;
+        }
+
+        // 3. 多重交叉筛选与卡片生成器
+        function filterDramas() {
+            const searchQuery = document.getElementById('search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('status-select').value;
+            const grid = document.getElementById('drama-grid');
+            grid.innerHTML = '';
+
+            let filtered = dramas.filter(item => {
+                const matchesCategory = (currentCategory === 'All' || item.category === currentCategory);
+                const matchesStatus = (statusFilter === 'All' || item.status === statusFilter);
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery) || 
+                                      item.synopsis.toLowerCase().includes(searchQuery) ||
+                                      (item.review && item.review.toLowerCase().includes(searchQuery));
+                return matchesCategory && matchesStatus && matchesSearch;
+            });
+
+            document.getElementById('filtered-count').innerText = filtered.length;
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center text-neutral-500 space-y-3">
+                        <i class="fa-solid fa-inbox text-4xl text-neutral-600 animate-bounce"></i>
+                        <p class="text-sm">这个分类下一部剧也没有找到哦，快点点击右上方录入吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(drama => {
+                const statusInfo = statusMap[drama.status] || { text: '未知', color: 'text-neutral-400' };
+                
+                // 拼接精美HTML卡片结构
+                const card = document.createElement('div');
+                card.id = drama.id;
+                card.className = "group glass-card rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:border-purple-500/40 cursor-pointer flex flex-col justify-between";
+                card.setAttribute('onclick', `openDetailModal('${drama.id}')`);
+                
+                // 渲染星级
+                let starsHTML = '';
+                let roundedRating = Math.round(drama.rating / 2);
+                for(let i=1; i<=5; i++) {
+                    starsHTML += `<i class="fa-solid fa-star text-xs ${i <= roundedRating ? 'text-amber-400' : 'text-white/10'}"></i>`;
+                }
+
+                card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[4/5] bg-neutral-900">
+                        <img src="${drama.poster || 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=500'}" alt="${drama.title}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0d0e12] via-[#0d0e12]/30 to-transparent opacity-90"></div>
+                        
+                        <span class="absolute top-4 left-4 border text-[10px] px-2.5 py-1 rounded-md font-semibold backdrop-blur-md ${statusInfo.color}">
+                            ${statusInfo.text}
+                        </span>
+                        
+                        <div class="absolute bottom-0 left-0 right-0 p-4 space-y-1.5">
+                            <div class="flex items-center gap-2 text-[10px] text-neutral-400">
+                                <span>${drama.year}</span>
+                                <span>•</span>
+                                <span class="bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-purple-300">${drama.category}</span>
+                            </div>
+                            <h3 class="text-base font-bold text-white group-hover:text-purple-400 transition truncate">${drama.title}</h3>
+                            <div class="flex items-center gap-1">${starsHTML} <span class="text-xs text-amber-400 font-bold ml-1">${drama.rating}</span></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-[#0d0e12]/80 border-t border-white/5 flex-grow flex flex-col justify-between">
+                        <p class="text-xs text-neutral-400 line-clamp-2 italic mb-2">
+                            <i class="fa-solid fa-quote-left text-[9px] text-purple-500/60 mr-1"></i>${drama.review || '该博主很懒，没有留下深度影评。'}
+                        </p>
+                        <div class="flex flex-wrap gap-1">
+                            ${drama.genres.map(g => `<span class="bg-neutral-800 text-neutral-400 text-[9px] px-2 py-0.5 rounded-full">${g}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 分类按钮高亮处理
+        function setCategoryFilter(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if(btn.getAttribute('data-cat') === cat) {
+                    btn.className = "category-btn cursor-pointer bg-purple-600 text-white text-xs font-medium px-4 py-2.5 rounded-xl transition whitespace-nowrap";
+                } else {
+                    btn.className = "category-btn cursor-pointer bg-white/5 hover:bg-white/10 text-neutral-300 text-xs font-medium px-4 py-2.5 rounded-xl transition whitespace-nowrap";
+                }
+            });
+            filterDramas();
+        }
+
+        // 4. 详情模态弹窗系统机制
+        function openDetailModal(id) {
+            const drama = dramas.find(d => d.id === id);
+            if(!drama) return;
+
+            const modal = document.getElementById('detail-modal');
+            const body = document.getElementById('detail-modal-body');
+
+            const statusInfo = statusMap[drama.status] || { text: '未知', color: 'text-neutral-400' };
+
+            body.innerHTML = `
+                <button onclick="closeDetailModal()" class="cursor-pointer absolute top-6 right-6 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition flex items-center justify-center border border-white/10 z-10">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                    <div class="md:col-span-1 space-y-3">
+                        <img src="${drama.poster || 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=500'}" alt="${drama.title}" class="w-full rounded-xl object-cover shadow-2xl border border-white/10 aspect-[3/4]">
+                        <div class="p-3 bg-white/5 rounded-xl border border-white/5 text-center">
+                            <span class="text-xs text-neutral-400">系统内核评级</span>
+                            <div class="text-2xl font-extrabold text-amber-400 mt-1"><i class="fa-solid fa-star text-sm mr-1"></i>${drama.rating} <span class="text-xs text-neutral-500 font-normal">/ 10</span></div>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 space-y-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <span class="text-xs bg-purple-500/20 text-purple-300 px-2.5 py-0.5 rounded border border-purple-500/30">${drama.category}</span>
+                                <span class="text-xs border px-2.5 py-0.5 rounded font-medium ${statusInfo.color}">${statusInfo.text}</span>
+                                <span class="text-neutral-500 text-xs ml-auto">${drama.year} 出品</span>
+                            </div>
+                            <h2 class="text-2xl font-extrabold text-white tracking-tight">${drama.title}</h2>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${drama.genres.map(g => `<span class="bg-white/5 border border-white/10 text-neutral-300 text-xs px-2.5 py-1 rounded-md">${g}</span>`).join('')}
+                        </div>
+                        <div class="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
+                            <h4 class="text-xs font-bold text-neutral-400 uppercase tracking-wider"><i class="fa-solid fa-compass text-purple-400 mr-1"></i> 剧情概要</h4>
+                            <p class="text-xs text-neutral-300 leading-relaxed text-justify">${drama.synopsis || '暂无详细介绍。'}</p>
+                        </div>
+                        <div class="space-y-1 bg-gradient-to-br from-purple-900/10 to-transparent p-4 rounded-xl border border-purple-500/20 shadow-inner">
+                            <h4 class="text-xs font-bold text-purple-400 uppercase tracking-wider"><i class="fa-solid fa-heart-pulse mr-1"></i> 博主深度私藏硬核剧评</h4>
+                            <p class="text-sm text-neutral-100 leading-relaxed font-medium pl-2 border-l-2 border-purple-500">${drama.review || '尚未补充长篇大论。'}</p>
+                        </div>
+                        ${drama.quote ? `
+                        <div class="text-xs italic text-neutral-400 bg-black/30 p-3 rounded-lg border-l-4 border-red-500/50">
+                            <i class="fa-solid fa-quote-left text-[9px] mr-1 text-red-400"></i> ${drama.quote}
+                        </div>` : ''}
+                        <div class="pt-2 flex justify-end">
+                            <button onclick="deleteDrama('${drama.id}')" class="cursor-pointer text-xs text-neutral-600 hover:text-red-400 transition bg-transparent hover:bg-red-500/5 px-3 py-1.5 rounded-lg border border-transparent hover:border-red-500/20"><i class="fa-solid fa-trash-can mr-1"></i> 从手账中剔除</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            body.classList.remove('scale-95');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('detail-modal-body').classList.add('scale-95');
+        }
+
+        // 5. 后台管理模态框显隐
+        function toggleAdminModal() {
+            const modal = document.getElementById('admin-modal');
+            modal.classList.toggle('opacity-0');
+            modal.classList.toggle('pointer-events-none');
+        }
+
+        // 6. 新增剧集数据表单提交处理
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            const newDrama = {
+                id: 'drama-' + Date.now(),
+                title: formData.get('title'),
+                year: formData.get('year') || '2026',
+                category: formData.get('category'),
+                genres: formData.get('genres') ? formData.get('genres').split(/[，,]/).map(g => g.trim()) : ["随笔"],
+                rating: parseFloat(formData.get('rating')) || 8.0,
+                status: formData.get('status'),
+                poster: formData.get('poster') || '',
+                synopsis: formData.get('synopsis') || '暂无大纲介绍。',
+                review: formData.get('review') || '未录入核心评语。',
+                quote: formData.get('review') ? `“${formData.get('review').substring(0, 30)}...”` : ''
+            };
+
+            dramas.unshift(newDrama);
+            localStorage.setItem('my_drama_journal', JSON.stringify(dramas));
+            
+            // 重置表单并关闭
+            event.target.reset();
+            toggleAdminModal();
+            
+            // 全局重新洗牌渲染
+            renderDashboardStats();
+            filterDramas();
+        }
+
+        // 7. 删除功能
+        function deleteDrama(id) {
+            if(confirm('确认要彻底删除该精选剧集手账记录吗？')) {
+                dramas = dramas.filter(d => d.id !== id);
+                localStorage.setItem('my_drama_journal', JSON.stringify(dramas));
+                closeDetailModal();
+                renderDashboardStats();
+                filterDramas();
+            }
+        }
+
+        // 8. 轮播变换 Hero 封面推荐
+        let heroState = 0;
+        function switchHeroFeatured() {
+            const banner = document.getElementById('hero-banner');
+            const title = document.getElementById('hero-title');
+            const synopsis = document.getElementById('hero-synopsis');
+
+            if(heroState === 0) {
+                banner.style.backgroundImage = `linear-gradient(to top, rgba(8,9,12,1) 0%, rgba(8,9,12,0.4) 50%, rgba(0,0,0,0) 100%), url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1200')`;
+                title.innerText = "沉香如屑 · 沉香重华";
+                synopsis.innerText = "颠覆传统仙侠小情小爱架构。菡萏仙子颜淡与六界帝君应渊海市蜃楼般的至高至情虐恋。解开以往误会后，最终携手粉碎邪恶阴谋，共同守护天下苍生，成毅在其中的哭戏极富感染力。";
+                heroState = 1;
+            } else {
+                banner.style.backgroundImage = `linear-gradient(to top, rgba(8,9,12,1) 0%, rgba(8,9,12,0.4) 50%, rgba(0,0,0,0) 100%), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200')`;
+                title.innerText = "琉璃 (Love and Redemption)";
+                synopsis.innerText = "天生“六识”残缺的少女褚璇玑和离泽宫弟子禹司凤，在面临爱情与前世阴谋的双重压力下，携手面对百般磨难，缔造了一段荡气回肠的仙侠传奇。司凤十生十世的隐忍付出与深情堪称仙侠白月光。";
+                heroState = 0;
+            }
+        }
+
+        // 9. 情感语录自动轮播器
+        function setupQuotesAnimation() {
+            const quotes = [
+                { text: "“我满眼都是他，可他为了天下苍生，唯独负了我。”", src: "—— 《沉香如屑》· 颜淡" },
+                { text: "“褚璇玑，你是个没有心的人。”", src: "—— 《琉璃》· 禹司凤" },
+                { text: "“Keep running, Max! 只要有一丝光芒，都不要向黑暗怪物低头。”", src: "—— 《怪奇物语 4》· Max" }
+            ];
+            let idx = 0;
+            setInterval(() => {
+                idx = (idx + 1) % quotes.length;
+                const textEl = document.getElementById('quote-text');
+                const srcEl = document.getElementById('quote-source');
+                if(textEl && srcEl) {
+                    textEl.style.opacity = 0;
+                    setTimeout(() => {
+                        textEl.innerText = quotes[idx].text;
+                        srcEl.innerText = quotes[idx].src;
+                        textEl.style.opacity = 1;
+                    }, 400);
+                }
+            }, 7000);
+        }
+
+        // 快捷锚点滑动
+        function scrollToDrama(id) {
+            const el = document.getElementById(id);
+            if(el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                openDetailModal(id);
+            } else {
+                // 如果当前过滤掉了，跳转重置
+                setCategoryFilter('All');
+                setTimeout(() => openDetailModal(id), 200);
+            }
+        }
+    </script>
 </body>
 </html>
