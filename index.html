@@ -81,9 +81,7 @@
 
     <div class="fixed top-6 right-6 z-40">
         <button onclick="toggleTheme()" class="flex items-center gap-2 text-[11px] tracking-wider bg-stone-50 border border-stone-200/80 dark:bg-stone-900 px-3 py-1.5 rounded-full cursor-pointer hover:bg-stone-200/50 shadow-sm transition-all text-stone-600 dark:text-stone-300">
-            <input type="checkbox" id="theme-checkbox" class="hidden">
-            <img src="" class="hidden" id="checker">
-            <id id="theme-icon" class="fa-solid fa-moon text-xs"></id>
+            <i id="theme-icon" class="fa-solid fa-moon text-xs"></i>
             <span id="theme-text">切换暗色影院</span>
         </button>
     </div>
@@ -139,7 +137,7 @@
     </footer>
 
     <script>
-        // 高质感个人私藏纯粹剧单数据
+        // 高质感个人私藏纯粹剧单数据 (已注入你给的专属封面链接)
         const journalData = [
             {
                 id: "item-1",
@@ -156,7 +154,7 @@
                 thoughts: "这是我的绝对白月光。它不讲如何成为天下第一，而是教人如何体面地告别、如何与自己的年少轻狂和世界的残缺和解。成毅演活了那种入骨的通透、温柔与悲悯。",
                 watchDate: "2023盛夏 / 每年重温",
                 moodTags: "🪷 见天地释怀 / 🦊 终局无憾",
-                poster: "https://images.unsplash.com/photo-1504618223053-559bdef9dd5a?w=600" // 充满古朴韵味的小屋与自然意境
+                poster: "https://share.google/tjsAmMMyaGY31ywoL"
             },
             {
                 id: "item-2",
@@ -173,7 +171,7 @@
                 thoughts: "成毅将道门最强兵人的清冷高孤、极致的纯粹与爱一个人时的孤注一掷拿捏得恰到好处。这是一出独属于中式骨血的奇幻极致浪漫。",
                 watchDate: "2025金秋私藏",
                 moodTags: "🗡️ 纯粹执念 / 🕸️ 惊艳名场面",
-                poster: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600" // 清冷剑意与光影
+                poster: "https://share.google/gs9wDRuDpks5tEiD0"
             },
             {
                 id: "item-3",
@@ -187,10 +185,10 @@
                 quote: "“只要神州一剑在，浩然正气便不灭！”",
                 character: "萧秋水 / 李沉舟 / 肖明明 (成毅 饰)",
                 scenes: "长剑独闯权力帮、于江山万里之间挥出惊天动地一剑的写意国风美学，行云流水。",
-                thoughts: "真正传统硬核中式武侠的风骨回归。成毅一人饰多角的层次分明，打戏更是大开大合充满了东方力量感。长剑所向，皆是江湖儿女的浩然正气。",
+                thoughts: "真正传统硬核中式武侠的风骨回归。成毅一人饰多角的层次分明，打戏更是大开大合充满了东方力量感。长剑所向，皆是江湖儿源的浩然正气。",
                 watchDate: "2025写意深秋",
                 moodTags: "⛰️ 浩然正气 / ⚔️ 绝美绝伦打戏",
-                poster: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600" // 巍峨山海写意质感
+                poster: "https://share.google/j3CIdy4zM2Xj0DOjx"
             },
             {
                 id: "item-4",
@@ -207,7 +205,7 @@
                 thoughts: "惊心动魄的顶级悬疑和智斗。谢淮安清冷孤绝、智计无双，成毅的眼神里全是克制的谋略感。每一帧特写镜头都像极为考究的电影画卷。",
                 watchDate: "2025寒冬深夜",
                 moodTags: "❄️ 冰冷肃杀 / ♟️ 顶级智斗",
-                poster: "https://images.unsplash.com/photo-1599733589046-10c005739ef9?w=600" // 暗黑幽邃的中式棋局烛光感
+                poster: "https://share.google/kGVtEz4loJlFNfevi"
             },
             {
                 id: "item-5",
@@ -224,11 +222,11 @@
                 thoughts: "青春最美好的样子。没有无谓的误会与狗血，只有纯粹的、互相吸引与救赎。看完让人极想回到那个穿着蓝白校服、空气中弥漫着蝉鸣与栀子花香的盛夏。",
                 watchDate: "2024仲夏重温",
                 moodTags: "☀️ 绝美小太阳 / 🥤 汽水糖夏日",
-                poster: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600" // 阳光、朋友与温热青春
+                poster: "https://share.google/BtweeWZSPIJAKfcYN"
             },
             {
                 id: "item-6",
-                title: "弱小英雄Class 1",
+                title: "弱小英雄 Class 1",
                 year: "2022",
                 category: "K-Drama",
                 countryLabel: "韩国",
@@ -241,10 +239,27 @@
                 thoughts: "极其震撼、真实甚至刺痛的写实青春作。蓝灰色的冷冽滤镜下，将少年的孤立无援、纯粹友情及被现实撕裂的绝望刻画得入木三分。眼神戏极具张力。",
                 watchDate: "2025静夜独看",
                 moodTags: "🥊 野生孤狼 / 🎨 绝赞冷调",
-                poster: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600" // 冰冷蓝调数码质感校园
+                poster: "https://share.google/WY2P2JZHfryML1Aub"
             },
             {
                 id: "item-7",
+                title: "弱小英雄 Class 2",
+                year: "2025",
+                category: "K-Drama",
+                countryLabel: "韩国",
+                genres: ["校园", "动作", "反抗", "残酷"],
+                rating: "9.6",
+                shortReview: "带着更深的创伤和未曾熄灭的怒火，转学后的连始垠在更加残酷的泥潭中，再次直面霸凌的巨浪。",
+                quote: "“不管到哪里，我都只是想安静地学习。”",
+                character: "连始垠 (朴志训 饰)",
+                scenes: "在新学校的走廊上面对挑衅时，那道冷酷、毫无畏惧的熟悉孤狼眼神再次聚焦。",
+                thoughts: "第二季在痛感与高燃的平衡上做得更极致。始垠背负着第一季的悲剧羁绊负重前行，每一次利落的反击都让人心疼而叹服。那种骨子里的傲骨与宿命感太抓人了。",
+                watchDate: "2026私藏留档",
+                moodTags: "🥊 孤狼再临 / 🔥 燃到窒息",
+                poster: "https://share.google/sXPdaNIOA3sdaDZXC"
+            },
+            {
+                id: "item-8",
                 title: "琉璃",
                 year: "2020",
                 category: "C-Drama",
@@ -258,10 +273,10 @@
                 thoughts: "把中式古典神话里的执念、因果与深情写到了极致。司凤的爱近乎自虐般无怨无悔，每次重温都会被其悲剧美学色彩打动。",
                 watchDate: "2026春末再赋",
                 moodTags: "🍵 宿命牵绊 / 😭 暴风哭泣",
-                poster: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600"
+                poster: "https://share.google/YYB8wNG1jiXiz7L37"
             },
             {
-                id: "item-8",
+                id: "item-9",
                 title: "沉香如屑 · 沉香重华",
                 year: "2022",
                 category: "C-Drama",
@@ -275,7 +290,7 @@
                 thoughts: "成毅一人分饰三角的破碎感拿捏得惊人，尤其是神界的隐忍与凡间的肆意形成强烈反差，立住了“爱别离、求不得”的宏大设定。",
                 watchDate: "2025回溯",
                 moodTags: "🍂 凄美浪漫 / 🏛️ 宏大格局",
-                poster: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600"
+                poster: "https://share.google/jDqhNS6fvWzEJdLk2"
             }
         ];
 
@@ -330,7 +345,7 @@
 
                 card.innerHTML = `
                     <div class="w-full aspect-[3/4] rounded-lg overflow-hidden bg-stone-100 relative">
-                        <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-102">
+                        <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-102" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500'">
                         <span class="absolute top-3 left-3 bg-stone-900/80 backdrop-blur-md text-stone-100 text-[9px] tracking-widest px-2 py-0.5 rounded font-medium">${item.countryLabel}</span>
                     </div>
                     <div class="space-y-2 flex-grow flex flex-col justify-between">
@@ -395,7 +410,7 @@
             content.innerHTML = `
                 <div class="md:col-span-4 space-y-4">
                     <div class="rounded-xl overflow-hidden shadow-2xl border border-white/5 relative aspect-[3/4]">
-                        <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover">
+                        <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500'">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#05060a] via-transparent to-transparent"></div>
                     </div>
                     <div class="bg-white/5 border border-white/5 rounded-xl p-4 text-center space-y-1">
