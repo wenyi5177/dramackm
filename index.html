@@ -13,7 +13,7 @@
             font-family: 'Plus Jakarta Sans', 'Noto Serif SC', -apple-system, sans-serif;
             background-color: #fcfbfa; /* 温暖舒适的画廊微白 */
             color: #2D312E;
-            transition: background-color 0.4s ease;
+            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .serif-title {
             font-family: 'Noto Serif SC', serif;
@@ -22,26 +22,52 @@
         /* 极简手账阴影 */
         .journal-shadow {
             box-shadow: 0 4px 20px -2px rgba(142, 147, 137, 0.12), 0 2px 8px -1px rgba(142, 147, 137, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .journal-shadow:hover {
-            box-shadow: 0 12px 30px -4px rgba(142, 147, 137, 0.2), 0 4px 12px -2px rgba(142, 147, 137, 0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px -4px rgba(142, 147, 137, 0.18), 0 4px 12px -2px rgba(142, 147, 137, 0.08);
         }
         /* 深色沉浸式毛玻璃 */
         .glass-panel {
-            background: rgba(20, 21, 33, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(18, 19, 28, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
         }
         /* 隐藏滚动条 */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 页面加载动画 */
         #loader {
             background-color: #fcfbfa;
             transition: opacity 0.6s ease, visibility 0.6s ease;
         }
+
+        /* 💡 动态扩展：高质感黑夜暗色手账主题 */
+        body.dark-theme {
+            background-color: #0e0f12;
+            color: #d1d5db;
+        }
+        body.dark-theme #loader { background-color: #0e0f12; }
+        body.dark-theme .bg-white {
+            background-color: #15171d !important;
+            border-color: rgba(255, 255, 255, 0.04) !important;
+        }
+        body.dark-theme .journal-shadow {
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+        }
+        body.dark-theme .journal-shadow:hover {
+            box-shadow: 0 16px 35px -4px rgba(0, 0, 0, 0.7);
+        }
+        body.dark-theme .text-stone-800 { color: #f3f4f6; }
+        body.dark-theme .text-stone-400 { color: #9ca3af; }
+        body.dark-theme .bg-stone-50 { background-color: #1e2129; color: #a1a1aa; border-color: #27272a; }
+        body.dark-theme .border-stone-200\/60 { border-color: rgba(255, 255, 255, 0.08); }
+        body.dark-theme #search-bar { background-color: #1a1c24; border-color: #2d3139; color: #f3f4f6; }
+        body.dark-theme .cat-tab:not(.bg-stone-900) { color: #9ca3af; }
+        body.dark-theme .cat-tab:not(.bg-stone-900):hover { background-color: rgba(255, 255, 255, 0.05); color: #fff; }
+        body.dark-theme .cat-tab.bg-stone-900 { background-color: #f3f4f6; color: #111827; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-stone-200">
@@ -53,8 +79,17 @@
         </div>
     </div>
 
+    <div class="fixed top-6 right-6 z-40">
+        <button onclick="toggleTheme()" class="flex items-center gap-2 text-[11px] tracking-wider bg-stone-50 border border-stone-200/80 dark:bg-stone-900 px-3 py-1.5 rounded-full cursor-pointer hover:bg-stone-200/50 shadow-sm transition-all text-stone-600 dark:text-stone-300">
+            <input type="checkbox" id="theme-checkbox" class="hidden">
+            <img src="" class="hidden" id="checker">
+            <id id="theme-icon" class="fa-solid fa-moon text-xs"></id>
+            <span id="theme-text">切换暗色影院</span>
+        </button>
+    </div>
+
     <header class="max-w-6xl w-full mx-auto px-6 pt-16 pb-12 text-center space-y-4">
-        <div class="text-[10px] tracking-[0.2em] text-stone-400 uppercase font-medium">Personal Drama Archive</div>
+        <div class="text-[10px] tracking-[0.2em] text-stone-400 uppercase font-medium">Personal Emotional Archive</div>
         <h1 class="text-3xl md:text-4xl serif-title text-stone-800 tracking-wide">我的追剧记录</h1>
         <p class="text-xs text-stone-400 italic">“ 记录每一部感动的瞬间，留住荧幕里的碎屑与光影。 ”</p>
         <div class="w-8 h-[1px] bg-stone-300 mx-auto pt-2"></div>
@@ -75,7 +110,7 @@
             </div>
             
             <div class="relative w-full md:w-64 flex-shrink-0">
-                <input type="text" id="search-bar" oninput="searchDrama()" placeholder="搜寻剧名、碎屑记忆..." class="w-full bg-stone-100 border border-stone-200/80 rounded-lg pl-4 pr-10 py-2 text-xs focus:outline-none focus:border-stone-400 transition placeholder-stone-400 text-stone-700">
+                <input type="text" id="search-bar" oninput="searchDrama()" placeholder="搜寻剧名、经典台词..." class="w-full bg-stone-100 border border-stone-200/80 rounded-lg pl-4 pr-10 py-2 text-xs focus:outline-none focus:border-stone-400 transition placeholder-stone-400 text-stone-700">
                 <i class="fa-solid fa-feather-pointed absolute right-4 top-1/2 -translate-y-1/2 text-stone-300 text-xs"></i>
             </div>
         </section>
@@ -85,9 +120,9 @@
 
     </main>
 
-    <div id="cinema-modal" class="fixed inset-0 z-50 bg-[#06070d]/95 backdrop-blur-2xl opacity-0 pointer-events-none transition-all duration-500 overflow-y-auto no-scrollbar flex items-center justify-center p-4 md:p-10">
-        <div class="absolute top-1/4 left-1/4 w-80 h-80 bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+    <div id="cinema-modal" class="fixed inset-0 z-50 bg-[#05060a]/96 backdrop-blur-2xl opacity-0 pointer-events-none transition-all duration-500 overflow-y-auto no-scrollbar flex items-center justify-center p-4 md:p-10">
+        <div class="absolute top-1/4 left-1/4 w-80 h-80 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div class="glass-panel max-w-4xl w-full rounded-2xl p-6 md:p-10 relative shadow-2xl transition-all duration-500 translate-y-8 opacity-0 scale-95" id="cinema-card">
             <button onclick="closeCinemaView()" class="absolute top-6 right-6 text-stone-500 hover:text-stone-200 transition text-sm cursor-pointer w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
@@ -104,27 +139,129 @@
     </footer>
 
     <script>
-        // 模拟高质感文青手账数据
+        // 高质感个人私藏纯粹剧单数据
         const journalData = [
             {
                 id: "item-1",
+                title: "莲花楼",
+                year: "2023",
+                category: "C-Drama",
+                countryLabel: "中国大陆",
+                genres: ["古装", "悬疑", "武侠", "释怀"],
+                rating: "9.9",
+                shortReview: "李相夷太耀眼了，但他却亲手埋葬了那个神话，选择做那个在阳光下养花做饭、慢吞吞踱步的李莲花。",
+                quote: "“那样的好地方，落花流水，真叫人舍不得。”",
+                character: "李莲花 / 李相夷 (成毅 饰)",
+                scenes: "东海之约的红绸舞剑、小舟之上的惊鸿绝唱，以及最后驾着莲花楼小车消失在江海尽头的洒脱背影。",
+                thoughts: "这是我的绝对白月光。它不讲如何成为天下第一，而是教人如何体面地告别、如何与自己的年少轻狂和世界的残缺和解。成毅演活了那种入骨的通透、温柔与悲悯。",
+                watchDate: "2023盛夏 / 每年重温",
+                moodTags: "🪷 见天地释怀 / 🦊 终局无憾",
+                poster: "https://images.unsplash.com/photo-1504618223053-559bdef9dd5a?w=600" // 充满古朴韵味的小屋与自然意境
+            },
+            {
+                id: "item-2",
+                title: "天地剑心",
+                year: "2025",
+                category: "C-Drama",
+                countryLabel: "中国大陆",
+                genres: ["古装", "奇幻", "漫改", "虐恋"],
+                rating: "9.6",
+                shortReview: "万剑穿心终不悔，相视一笑轻王权。王权富贵为了怀中的小蜘蛛，甘愿抛弃冷冰冰的兵人王座。",
+                quote: "“如果我们能活着出去的话，千山万水，你愿意陪我一起看吗？”",
+                character: "王权富贵 (成毅 饰) / 清瞳 (李一桐 饰)",
+                scenes: "怀抱清瞳无畏走出王权家大门、万剑齐发的震撼视听，以及血色中那决绝而温柔的步履。",
+                thoughts: "成毅将道门最强兵人的清冷高孤、极致的纯粹与爱一个人时的孤注一掷拿捏得恰到好处。这是一出独属于中式骨血的奇幻极致浪漫。",
+                watchDate: "2025金秋私藏",
+                moodTags: "🗡️ 纯粹执念 / 🕸️ 惊艳名场面",
+                poster: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600" // 清冷剑意与光影
+            },
+            {
+                id: "item-3",
+                title: "赴山海",
+                year: "2025",
+                category: "C-Drama",
+                countryLabel: "中国大陆",
+                genres: ["古装", "武侠", "江湖", "宏大"],
+                rating: "9.7",
+                shortReview: "侠之大者，行于山海。萧秋水从一个快意恩仇的青涩少年，终成长为背负天下大义的绝代大侠。",
+                quote: "“只要神州一剑在，浩然正气便不灭！”",
+                character: "萧秋水 / 李沉舟 / 肖明明 (成毅 饰)",
+                scenes: "长剑独闯权力帮、于江山万里之间挥出惊天动地一剑的写意国风美学，行云流水。",
+                thoughts: "真正传统硬核中式武侠的风骨回归。成毅一人饰多角的层次分明，打戏更是大开大合充满了东方力量感。长剑所向，皆是江湖儿女的浩然正气。",
+                watchDate: "2025写意深秋",
+                moodTags: "⛰️ 浩然正气 / ⚔️ 绝美绝伦打戏",
+                poster: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600" // 巍峨山海写意质感
+            },
+            {
+                id: "item-4",
+                title: "长安二十四计",
+                year: "2025",
+                category: "C-Drama",
+                countryLabel: "中国大陆",
+                genres: ["古装", "悬疑", "谋略", "复仇"],
+                rating: "9.6",
+                shortReview: "谢淮安潜伏十载，以长安为巨型棋盘，二十四计为锋芒，步步将灭门深仇与江山博弈下成一盘精绝死局。",
+                quote: "“这长安的雪，已经下了十五年，是时候该停了。”",
+                character: "谢淮安 (成毅 饰)",
+                scenes: "大雪之夜独坐阁楼落子对弈，在重重杀机包围中淡然摇扇、智算天下的顶级心理战游戏。",
+                thoughts: "惊心动魄的顶级悬疑和智斗。谢淮安清冷孤绝、智计无双，成毅的眼神里全是克制的谋略感。每一帧特写镜头都像极为考究的电影画卷。",
+                watchDate: "2025寒冬深夜",
+                moodTags: "❄️ 冰冷肃杀 / ♟️ 顶级智斗",
+                poster: "https://images.unsplash.com/photo-1599733589046-10c005739ef9?w=600" // 暗黑幽邃的中式棋局烛光感
+            },
+            {
+                id: "item-5",
+                title: "当我飞奔向你",
+                year: "2023",
+                category: "C-Drama",
+                countryLabel: "中国大陆",
+                genres: ["青春", "校园", "治愈", "白月光"],
+                rating: "9.4",
+                shortReview: "苏在在像一轮毫无阴霾的暖阳，一头撞进了张陆让那个原本有些孤寂、长满苔藓的克制世界里。",
+                quote: "“原来长大的意义，就在于你可以选择跟喜欢的人在一起。”",
+                character: "苏在在 / 张陆让",
+                scenes: "操场边缘落下的金色夕阳、下雨天共同撑起的那把雨伞，空气中都是干净的薄荷汽水味。",
+                thoughts: "青春最美好的样子。没有无谓的误会与狗血，只有纯粹的、互相吸引与救赎。看完让人极想回到那个穿着蓝白校服、空气中弥漫着蝉鸣与栀子花香的盛夏。",
+                watchDate: "2024仲夏重温",
+                moodTags: "☀️ 绝美小太阳 / 🥤 汽水糖夏日",
+                poster: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600" // 阳光、朋友与温热青春
+            },
+            {
+                id: "item-6",
+                title: "弱小英雄Class 1",
+                year: "2022",
+                category: "K-Drama",
+                countryLabel: "韩国",
+                genres: ["校园", "暴力", "反抗", "宿命"],
+                rating: "9.5",
+                shortReview: "一个只懂死读书的孤僻天才学霸，面对残酷霸凌，用他的高智商与近乎自毁的野性狠劲筑起反抗壁垒。",
+                quote: "“我不是拜托过你，让你停下吗？”",
+                character: "连始垠 (朴志训 饰) / 安修豪",
+                scenes: "始垠眼神瞬间冰冷、利用物理定律利落反击；三个孤独少年在破旧小馆子里留下的短暂欢笑。",
+                thoughts: "极其震撼、真实甚至刺痛的写实青春作。蓝灰色的冷冽滤镜下，将少年的孤立无援、纯粹友情及被现实撕裂的绝望刻画得入木三分。眼神戏极具张力。",
+                watchDate: "2025静夜独看",
+                moodTags: "🥊 野生孤狼 / 🎨 绝赞冷调",
+                poster: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600" // 冰冷蓝调数码质感校园
+            },
+            {
+                id: "item-7",
                 title: "琉璃",
                 year: "2020",
                 category: "C-Drama",
                 countryLabel: "中国大陆",
                 genres: ["仙侠", "玄幻", "虐恋"],
                 rating: "9.6",
-                shortReview: "司凤用十生十世的隐忍付出，在残缺的六识里种出了一颗血淋淋却最炽热的心。",
+                shortReview: "司凤用十生十世的隐忍付出，在残缺的六识里种出了一颗最炽热的心。",
                 quote: "“褚璇玑，你是个没有心的人。”",
                 character: "禹司凤 (成毅 饰)",
-                scenes: "第十世离泽宫前揭下面具、司凤屡次为爱受刑吐血却眼神坚定的高能瞬间。",
-                thoughts: "这绝不是一部快餐仙侠，它把中式神话里的执念与因果写到了极致。司凤的爱不是占有，是近乎自虐的成全，每次看都会被中式古典美学里的悲剧色彩深深震撼。",
-                watchDate: "2026春末 · 留存",
-                moodTags: "🍵 宿命感 / 😭 暴风哭泣",
-                poster: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500"
+                scenes: "第十世离泽宫前自愿揭下面具、屡次吐血却延伸异常坚定的深情名场面。",
+                thoughts: "把中式古典神话里的执念、因果与深情写到了极致。司凤的爱近乎自虐般无怨无悔，每次重温都会被其悲剧美学色彩打动。",
+                watchDate: "2026春末再赋",
+                moodTags: "🍵 宿命牵绊 / 😭 暴风哭泣",
+                poster: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600"
             },
             {
-                id: "item-2",
+                id: "item-8",
                 title: "沉香如屑 · 沉香重华",
                 year: "2022",
                 category: "C-Drama",
@@ -133,29 +270,12 @@
                 rating: "9.3",
                 shortReview: "菡萏香销，沉香成屑。他为了肩上的苍生重担克制了所有爱意，却在眼神里泛滥成灾。",
                 quote: "“我满眼都是他，可他为了天下苍生，唯独负了我。”",
-                character: "应渊 / 唐周 / 玄夜",
+                character: "应渊 / 唐周 / 玄夜 (成毅 饰)",
                 scenes: "夜忘川八百年的长河枯等、应渊帝君在地止白发缚树的绝望自我禁锢。",
-                thoughts: "这是一首带着古典悲剧美德的诗。成毅一人分饰三角的破碎感拿捏得惊人，尤其是神界的隐忍与凡间的肆意形成强烈反差，让关于神仙也有“爱别离、求不得”的宏大设定立住了脚。",
-                watchDate: "2026-04-12",
+                thoughts: "成毅一人分饰三角的破碎感拿捏得惊人，尤其是神界的隐忍与凡间的肆意形成强烈反差，立住了“爱别离、求不得”的宏大设定。",
+                watchDate: "2025回溯",
                 moodTags: "🍂 凄美浪漫 / 🏛️ 宏大格局",
-                poster: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=500"
-            },
-            {
-                id: "item-3",
-                title: "怪奇物语 第四季",
-                year: "2022",
-                category: "Western Series",
-                countryLabel: "美国",
-                genres: ["科幻", "复古", "惊悚"],
-                rating: "9.5",
-                shortReview: "当复古摇滚乐在危机时刻轰鸣响起，那不只是少年的逃亡，更是对青春与友谊最热烈的赞歌。",
-                quote: "“Keep running, Max!”",
-                character: "Max Mayfield / Eddie Munson",
-                scenes: "Max戴着耳机在红色梦魇空间拼命奔跑，奔向现实中呼唤她的朋友们；Eddie在异世界楼顶弹奏吉他引开怪物。",
-                thoughts: "完全超越了前几季的厚度。通过音乐和心魔隐喻青少年的创伤与成长，那一幕幕美式复古美学与宏大的配乐交织在一起，浪漫热血到骨子里，它是真正属于次世代的胶片记忆。",
-                watchDate: "2025年冬",
-                moodTags: "🎸 热血沸腾 / 📺 复古胶片",
-                poster: "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=500"
+                poster: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600"
             }
         ];
 
@@ -163,17 +283,32 @@
 
         // 页面初始化
         window.onload = () => {
-            // 模拟雅致的加载延迟
             setTimeout(() => {
                 const loader = document.getElementById('loader');
                 loader.style.opacity = '0';
                 loader.style.visibility = 'hidden';
-            }, 600);
+            }, 500);
 
             renderGrid(journalData);
         };
 
-        // 核心：手账网格渲染器
+        // 背景明暗调节器逻辑
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (isDark) {
+                themeIcon.className = "fa-solid fa-sun text-amber-400 text-xs";
+                themeText.innerText = "切换明亮手账";
+            } else {
+                themeIcon.className = "fa-solid fa-moon text-xs";
+                themeText.innerText = "切换暗色影院";
+            }
+        }
+
+        // 手账网格渲染器
         function renderGrid(data) {
             const grid = document.getElementById('journal-grid');
             grid.innerHTML = '';
@@ -195,16 +330,16 @@
 
                 card.innerHTML = `
                     <div class="w-full aspect-[3/4] rounded-lg overflow-hidden bg-stone-100 relative">
-                        <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-102">
+                        <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-102">
                         <span class="absolute top-3 left-3 bg-stone-900/80 backdrop-blur-md text-stone-100 text-[9px] tracking-widest px-2 py-0.5 rounded font-medium">${item.countryLabel}</span>
                     </div>
                     <div class="space-y-2 flex-grow flex flex-col justify-between">
                         <div class="space-y-1">
                             <div class="flex items-center justify-between text-stone-400 text-[10px]">
-                                <span>${item.year} 出品</span>
-                                <span class="bg-stone-100 text-stone-600 px-1.5 py-0.5 rounded text-[9px]">${item.category}</span>
+                                <span>${item.year} 年份记录</span>
+                                <span class="bg-stone-50 border border-stone-200/40 text-stone-500 px-1.5 py-0.5 rounded text-[9px]">${item.category}</span>
                             </div>
-                            <h3 class="text-base serif-title text-stone-800 tracking-wide group-hover:text-stone-500 transition-colors">${item.title}</h3>
+                            <h3 class="text-base serif-title text-stone-800 tracking-wide transition-colors">${item.title}</h3>
                         </div>
                         <p class="text-xs text-stone-400 line-clamp-2 leading-relaxed italic border-l border-stone-200 pl-2 pt-1">${item.shortReview}</p>
                         <div class="flex flex-wrap gap-1 pt-2">
@@ -241,7 +376,8 @@
                 const matchCat = (activeCategory === "All" || item.category === activeCategory);
                 const matchQuery = item.title.toLowerCase().includes(query) || 
                                    item.shortReview.toLowerCase().includes(query) || 
-                                   item.thoughts.toLowerCase().includes(query);
+                                   item.thoughts.toLowerCase().includes(query) ||
+                                   item.character.toLowerCase().includes(query);
                 return matchCat && matchQuery;
             });
             renderGrid(filtered);
@@ -256,12 +392,11 @@
             const card = document.getElementById('cinema-card');
             const content = document.getElementById('modal-content');
 
-            // 注入专属于暗黑美学、情绪饱满的影评架构
             content.innerHTML = `
                 <div class="md:col-span-4 space-y-4">
                     <div class="rounded-xl overflow-hidden shadow-2xl border border-white/5 relative aspect-[3/4]">
                         <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#06070d] via-transparent to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#05060a] via-transparent to-transparent"></div>
                     </div>
                     <div class="bg-white/5 border border-white/5 rounded-xl p-4 text-center space-y-1">
                         <span class="text-[10px] text-stone-500 uppercase tracking-widest block">心流私藏评分</span>
@@ -286,8 +421,8 @@
                             <span class="text-xs text-stone-200 font-medium">${item.character}</span>
                         </div>
                         <div class="bg-white/5 border border-white/5 p-3 rounded-lg">
-                            <span class="text-[10px] text-blue-400 block mb-1"><i class="fa-solid fa-calendar-day mr-1"></i> 留存日期 / 情绪状态</span>
-                            <span class="text-xs text-stone-200 font-medium">${item.watchDate} ${item.moodTags}</span>
+                            <span class="text-[10px] text-blue-400 block mb-1"><i class="fa-solid fa-calendar-day mr-1"></i> 留存状态 / 追剧心绪</span>
+                            <span class="text-xs text-stone-200 font-medium">${item.watchDate} &nbsp; ${item.moodTags}</span>
                         </div>
                     </div>
 
@@ -309,10 +444,9 @@
                 </div>
             `;
 
-            // 触发动画显现
             modal.classList.remove('opacity-0', 'pointer-events-none');
             card.classList.remove('translate-y-8', 'opacity-0', 'scale-95');
-            document.body.style.overflow = 'hidden'; // 锁定底层滚动
+            document.body.style.overflow = 'hidden';
         }
 
         // 关闭详情
@@ -322,7 +456,7 @@
             
             card.classList.add('translate-y-8', 'opacity-0', 'scale-95');
             modal.classList.add('opacity-0', 'pointer-events-none');
-            document.body.style.overflow = ''; // 恢复滚动
+            document.body.style.overflow = '';
         }
     </script>
 </body>
