@@ -79,21 +79,21 @@
         </div>
     </div>
 
-    <div class="fixed top-6 right-6 z-40">
+    <div class="fixed top-4 right-4 sm:top-6 sm:right-6 z-40">
         <button onclick="toggleTheme()" class="flex items-center gap-2 text-[11px] tracking-wider bg-stone-50 border border-stone-200/80 dark:bg-stone-900 px-3 py-1.5 rounded-full cursor-pointer hover:bg-stone-200/50 shadow-sm transition-all text-stone-600 dark:text-stone-300">
             <i id="theme-icon" class="fa-solid fa-moon text-xs"></i>
             <span id="theme-text">切换暗色影院</span>
         </button>
     </div>
 
-    <header class="max-w-6xl w-full mx-auto px-6 pt-16 pb-12 text-center space-y-4">
+    <header class="max-w-6xl w-full mx-auto px-4 sm:px-6 pt-16 pb-12 text-center space-y-4">
         <div class="text-[10px] tracking-[0.2em] text-stone-400 uppercase font-medium">Personal Emotional Archive</div>
         <h1 class="text-3xl md:text-4xl serif-title text-stone-800 tracking-wide">我的追剧记录</h1>
         <p class="text-xs text-stone-400 italic">“ 记录每一部感动的瞬间，留住荧幕里的碎屑与光影。 ”</p>
         <div class="w-8 h-[1px] bg-stone-300 mx-auto pt-2"></div>
     </header>
 
-    <main class="flex-grow max-w-6xl w-full mx-auto px-6 pb-20 space-y-10">
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 pb-20 space-y-10">
         
         <section class="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-stone-200/60 pb-6">
             <div class="flex items-center gap-1 overflow-x-auto w-full md:w-auto no-scrollbar py-1">
@@ -118,16 +118,16 @@
 
     </main>
 
-    <div id="cinema-modal" class="fixed inset-0 z-50 bg-[#05060a]/96 backdrop-blur-2xl opacity-0 pointer-events-none transition-all duration-500 overflow-y-auto no-scrollbar flex items-center justify-center p-4 md:p-10">
+    <div id="cinema-modal" class="fixed inset-0 z-50 bg-[#05060a]/96 backdrop-blur-2xl opacity-0 pointer-events-none transition-all duration-500 overflow-y-auto no-scrollbar flex items-start md:items-center justify-center p-4 md:p-10">
         <div class="absolute top-1/4 left-1/4 w-80 h-80 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-        <div class="glass-panel max-w-4xl w-full rounded-2xl p-6 md:p-10 relative shadow-2xl transition-all duration-500 translate-y-8 opacity-0 scale-95" id="cinema-card">
-            <button onclick="closeCinemaView()" class="absolute top-6 right-6 text-stone-500 hover:text-stone-200 transition text-sm cursor-pointer w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+        <div class="glass-panel max-w-4xl w-full rounded-2xl p-5 md:p-10 relative shadow-2xl transition-all duration-500 translate-y-8 opacity-0 scale-95 my-auto" id="cinema-card">
+            <button onclick="closeCinemaView()" class="absolute top-4 right-4 md:top-6 md:right-6 text-stone-500 hover:text-stone-200 transition text-sm cursor-pointer w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10 z-10">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <div id="modal-content" class="grid grid-cols-1 md:grid-cols-12 gap-8 text-stone-300 text-sm"></div>
+            <div id="modal-content" class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 text-stone-300 text-sm"></div>
         </div>
     </div>
 
@@ -307,7 +307,7 @@
                 thoughts: "知竹导演的镜头美学简直是仙侠剧的‘洗眼剂’！它彻底打破了传统仙侠的工业糖精感，把‘双强马甲’和‘假面夫妻’的智商博弈与情感试探展现得淋漓尽致。看着两个极致清醒、极度防备的人在重重算计中动心、并最终在风雨诡谲中将生死交付对方，这种清冷孤绝又拉扯到窒息的宿命感后劲太足了。",
                 watchDate: "2025金秋 / 沉浸追剧",
                 moodTags: "🎭 顶级马甲 / ⚡ 宿敌互猎",
-                poster: "https://image.tmdb.org/t/p/original/5GEUUCKuZvglgiJc35mGI378i8K.jpg"
+                poster: "images/ruqingyun.jpg"
             }
         ];
 
@@ -426,22 +426,22 @@
 
             content.innerHTML = `
                 <div class="md:col-span-4 space-y-4">
-                    <div class="rounded-xl overflow-hidden shadow-2xl border border-white/5 relative aspect-[3/4]">
+                    <div class="rounded-xl overflow-hidden shadow-2xl border border-white/5 relative aspect-[3/4] max-w-[220px] md:max-w-none mx-auto">
                         <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500'">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#05060a] via-transparent to-transparent"></div>
                     </div>
-                    <div class="bg-white/5 border border-white/5 rounded-xl p-4 text-center space-y-1">
+                    <div class="bg-white/5 border border-white/5 rounded-xl p-3 text-center space-y-1 max-w-[220px] md:max-w-none mx-auto w-full">
                         <span class="text-[10px] text-stone-500 uppercase tracking-widest block">心流私藏评分</span>
-                        <div class="text-2xl font-semibold text-purple-400 font-serif"><i class="fa-solid fa-star text-xs mr-1 text-amber-400"></i>${item.rating} <span class="text-xs text-stone-600">/ 10</span></div>
+                        <div class="text-xl md:text-2xl font-semibold text-purple-400 font-serif"><i class="fa-solid fa-star text-xs mr-1 text-amber-400"></i>${item.rating} <span class="text-xs text-stone-600">/ 10</span></div>
                     </div>
                 </div>
 
                 <div class="md:col-span-8 space-y-6">
-                    <div>
+                    <div class="pr-8 md:pr-0">
                         <div class="flex items-center gap-2 text-[10px] text-stone-500 mb-1">
                             <span>${item.countryLabel}</span>•<span>${item.year}</span>•<span>${item.category}</span>
                         </div>
-                        <h2 class="text-2xl serif-title text-white tracking-wide">${item.title}</h2>
+                        <h2 class="text-xl md:text-2xl serif-title text-white tracking-wide">${item.title}</h2>
                         <div class="flex flex-wrap gap-1 mt-2">
                             ${item.genres.map(g => `<span class="bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[10px] px-2 py-0.5 rounded">${g}</span>`).join('')}
                         </div>
